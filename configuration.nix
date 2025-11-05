@@ -8,38 +8,54 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-    ];
+	];
 
-  programs.fish = { 
-  	enable = true; 
-	interactiveShellInit = "set fish_greeting";
+  services.xserver.videoDrivers = [ 
+	"nvidia"
+	"modesetting"
+  ];
+
+  hardware.graphics.enable = true;
+  hardware.nvidia.open = true;  # see the note above
+  hardware.nvidia.prime = {
+	offload.enable = true;
+	offload.enableOffloadCmd = true;
+
+    intelBusId = "PCI:0:2:0";
+    nvidiaBusId = "PCI:1:0:0";
   };
 
-  programs.starship.enable = true;
+  programs = {
+	starship.enable = true;
+	hyprland.enable = true;
+  	fish = {
+  	  enable = true; 
+	  interactiveShellInit = "set fish_greeting";
+	  shellAbbrs = {
+	    up = "sudo nixos-rebuild switch --flake ~/nixos";
+	  };
+	  shellAliases = {
+	    ls = "eza --icons";
+	  };
+	};
+	neovim = {
+	  enable = true;
+      package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+	};
+  };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.useOSProber = true;
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  programs.hyprland = {
-    enable = true;
-    #xwayland.enable = true;
-  };
-
-  programs.neovim = {
-    enable = true;
-    package =     inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
-  };
 
   services.displayManager.sddm = { 
   	enable = true;
@@ -86,10 +102,6 @@
     ];
   };
 
-  services.qemuGuest = { 
-	enable = true; 
-  };
-  
   # Enable automatic login for the user.
   #services.getty.autologinUser = "elliot";
 
@@ -100,15 +112,20 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
      git
+	 gcc
+	 clang
      kitty
-     wofi
-	 tofi
+     tofi
      zsh
      firefox
      btop
      hyprpaper
-	 libxcvt
-  #  wget
+	 wget
+	 hyprlock
+	 steam
+	 discord
+	 clang-tools
+	 nixd
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -139,5 +156,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
-
 }
