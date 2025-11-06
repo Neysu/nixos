@@ -10,19 +10,39 @@
       ./hardware-configuration.nix
 	];
 
-  services.xserver.videoDrivers = [ 
-	"nvidia"
-	"modesetting"
-  ];
+  services = { 
+	blueman.enable = true;
 
-  hardware.graphics.enable = true;
-  hardware.nvidia.open = true;  # see the note above
-  hardware.nvidia.prime = {
-	offload.enable = true;
-	offload.enableOffloadCmd = true;
+	openssh.enable = true;
 
-    intelBusId = "PCI:0:2:0";
-    nvidiaBusId = "PCI:1:0:0";
+	displayManager.sddm = { 
+	  enable = true;
+	  wayland.enable = true;
+    };
+
+  	xserver = { 
+	  videoDrivers = [ "nvidia" "modesetting" ];
+	  xkb = {
+        layout = "us";
+	   	variant = "";
+      };
+	};
+  };
+
+  hardware = { 
+	bluetooth.enable = true;
+	graphics.enable = true;
+    nvidia = {
+	  open = true;
+  	  prime = {
+	    offload = {
+	      enable = true;
+	      enableOffloadCmd = true;
+	    };
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+	  };
+	};
   };
 
   programs = {
@@ -32,7 +52,7 @@
   	  enable = true; 
 	  interactiveShellInit = "set fish_greeting";
 	  shellAbbrs = {
-	    up = "sudo nixos-rebuild switch --flake ~/nixos";
+	    up = "sudo nixos-rebuild switch --flake ~/.config/flake-nixos";
 	  };
 	  shellAliases = {
 	    ls = "eza --icons";
@@ -42,6 +62,22 @@
 	  enable = true;
       package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
 	};
+	waybar.enable = true;
+	steam = {
+	  enable = true;
+	  remotePlay.openFirewall = true;
+	  dedicatedServer.openFirewall = true;
+	};
+	git = {
+	  enable = true;
+	  config = {
+		user = {
+	  	  email = "elliot.gibeaux@proton.me";
+		  name = "Elliot";
+		};
+		code.core = "nvim";
+	  };
+	};
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -50,20 +86,17 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
-  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking = {
+	networkmanager.enable = true;
+	hostName = "nixos"; 
+  };
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  services.displayManager.sddm = { 
-  	enable = true;
-	wayland.enable = true;
-  };
 
   # Enable networking
-  networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "Europe/Paris";
@@ -84,10 +117,6 @@
   };
 
   # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.elliot = {
@@ -108,24 +137,24 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
+
   environment.systemPackages = with pkgs; [
-     git
 	 gcc
 	 clang
      kitty
-     tofi
+     wofi
      zsh
      firefox
      btop
      hyprpaper
 	 wget
 	 hyprlock
-	 steam
 	 discord
 	 clang-tools
 	 nixd
+  	 rofi
+	 bluez
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -139,9 +168,6 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
- 	services.openssh = { 
-		enable = true;
-	};
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
