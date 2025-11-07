@@ -46,6 +46,7 @@
   };
 
   programs = {
+  	bat.enable = true;
 	starship.enable = true;
 	hyprland.enable = true;
   	fish = {
@@ -83,8 +84,10 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader =  { 
+  	systemd-boot.enable = true; 
+  	efi.canTouchEfiVariables = true;
+  };
 
   networking = {
 	networkmanager.enable = true;
@@ -124,11 +127,6 @@
     isNormalUser = true;
     description = "elliot";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    	fastfetch
-		eza
-		bat
-    ];
   };
 
   # Enable automatic login for the user.
@@ -143,8 +141,6 @@
 	 gcc
 	 clang
      kitty
-     wofi
-     zsh
      firefox
      btop
      hyprpaper
@@ -153,8 +149,10 @@
 	 discord
 	 clang-tools
 	 nixd
-  	 rofi
 	 bluez
+	 albert
+	 fastfetch
+	 eza
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
