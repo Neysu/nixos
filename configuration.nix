@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 {
   imports = [
@@ -84,7 +84,7 @@
 	  viAlias = true;
 	  vimAlias = true;
 	  defaultEditor = true;
-      package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default; # to remove on the 25.12
+      package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default; # to remove on the 25.11
     };
   };
 
@@ -116,6 +116,8 @@
   };
 
   services = {
+	fprintd.enable = true;
+  	fwupd.enable = true;
     xserver = {
       xkb.layout = "us";
     };
@@ -185,10 +187,10 @@
 			  exec = "ghostty";
 			};
 			"org/gnome/shell/keybindings" = {
-			 show-screen-recording-ui = "['<Shift><Super>s']";
+			 show-screen-recording-ui = [ "<Shift><Super>s" ];
 			};
 			"org/gnome/mutter" = {
-			  experimental-features = "['scale-monitor-framebuffer']";
+			  experimental-features = [ "scale-monitor-framebuffer" ];
 			};
 		  };
 		};
@@ -214,7 +216,7 @@
     shell = pkgs.fish;
     isNormalUser = true;
     description = "elliot";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
   };
 
   fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
@@ -265,6 +267,8 @@
       eza
       wget
       btop
+	  gnumake
+	  openssl
       ripunzip
       fastfetch
       wl-clipboard
