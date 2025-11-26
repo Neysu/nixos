@@ -212,10 +212,14 @@
   
 	  # gui apps
       mpv
+	  sushi
+	  loupe
+	  papers
 	  feishin
 	  bottles
       discord
       firefox
+	  showtime
       nautilus
       obs-studio
       qbittorrent
