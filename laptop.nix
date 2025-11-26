@@ -7,6 +7,11 @@
 
   security.rtkit.enable = true;
 
+  services = {
+	fprintd.enable = true;
+  	fwupd.enable = true;
+  };
+
   hardware = {
     nvidia = {
 	  open = true;

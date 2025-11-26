@@ -88,8 +88,6 @@
   };
 
   services = {
-	fprintd.enable = true;
-  	fwupd.enable = true;
     xserver = {
       xkb.layout = "us";
     };
