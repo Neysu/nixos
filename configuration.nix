@@ -1,12 +1,6 @@
 { config, pkgs, inputs, lib, ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-  ];
-
-  security.rtkit.enable = true;
-
   hardware = {
   	bluetooth = { 
   	  enable = true; 
@@ -21,22 +15,6 @@
 	    };
 	  };
     };
-    nvidia = {
-	  open = true;
-  	  prime = {
-	    offload = {
-	      enable = true;
-	      enableOffloadCmd = true;
-	    };
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:1:0:0";
-	  };
-	};
-
-	firmware = [
-	  pkgs.linux-firmware
-      pkgs.sof-firmware
-    ];
   };
 
   boot = {
@@ -86,12 +64,6 @@
 	  defaultEditor = true;
       package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default; # to remove on the 25.11
     };
-  };
-
-  networking = {
-    networkmanager.enable = true;
-    hostName = "nixos";
-    enableIPv6 = false;
   };
 
   nix.settings = { 
@@ -178,6 +150,11 @@
 			  custom-theme-shrink = true;
 			  apply-custom-theme = false;
 			  intellihide-mode = "ALL_WINDOWS";
+			};
+			"org/gnome/shell/extensions/search-light" = {
+			  shortcut-search = [ "<Super>r" ];
+			  animation-speed = 400.0;
+			  border-radius = 2.9726027397260273;
 			};
 			"org/gnome/desktop/wm/preferences" = {
 			  button-layout = "appmenu:minimize,close";

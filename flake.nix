@@ -10,11 +10,22 @@
   };
 
   outputs = { self, nix-flatpak, nixpkgs, neovim-nightly-overlay, home-manager, ... }@inputs: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nixos-laptop = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [ 
 	    ./configuration.nix 
+		./laptop.nix
+		home-manager.nixosModules.home-manager
+		nix-flatpak.nixosModules.nix-flatpak
+	  ];
+    };
+    nixosConfigurations.nixos-desktop = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
+      modules = [ 
+	    ./configuration.nix 
+		./desktop.nix
 		home-manager.nixosModules.home-manager
 		nix-flatpak.nixosModules.nix-flatpak
 	  ];
