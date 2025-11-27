@@ -222,6 +222,7 @@
       obs-studio
       qbittorrent
   	  gnome-tweaks
+	  gnome-clocks
       protonvpn-gui
 	  gnome-calendar
 	  gnome-calculator
