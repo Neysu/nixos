@@ -8,7 +8,7 @@
 	  settings = {
 	  	General = {
 		  Experimental = true;
-		  FastConnectable = true;
+		  #FastConnectable = true;
 	    };
 	  	Policy = { 
 		  AutoEnable = true;
@@ -45,6 +45,13 @@
       dedicatedServer.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
     };
+	bash = {
+		enable = true;
+		completion.enable = true;
+		shellAliases = {
+		  icat = "kitten icat";
+		};
+	};
     fish = {
       enable = true;
       interactiveShellInit = "set fish_greeting";
@@ -210,6 +217,8 @@
   
 	  # gui apps
       mpv
+	  bluez
+	  kitty
 	  sushi
 	  loupe
 	  papers
@@ -225,6 +234,8 @@
 	  gnome-clocks
       protonvpn-gui
 	  gnome-calendar
+	  signal-desktop
+	  gnome-bluetooth
 	  gnome-calculator
 	  gnome-text-editor
   
