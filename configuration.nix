@@ -94,6 +94,10 @@
     LC_TIME = "fr_FR.UTF-8";
   };
 
+  environment.gnome.excludePackages = with pkgs; [
+	gnome-tour
+	gnome-user-docs
+  ];
   services = {
     xserver = {
       xkb.layout = "us";
@@ -266,5 +270,19 @@
   	];
   };
 
+  nix = {
+    settings.auto-optimise-store = true; #don't know why the lsp doesn't likes 'settings'
+    gc = {
+      automatic = true;
+      persistent = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+  };
+  system.autoUpgrade = {
+    enable = true;
+    flake = "~/.config/flake-nixos/";
+    dates = "daily";
+  };
   system.stateVersion = "25.05";
 }
