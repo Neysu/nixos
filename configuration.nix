@@ -256,12 +256,15 @@
 	  gopls
       clang-tools
       lua-language-server
+	  yaml-language-server
       docker-language-server
   
 	  # cli and tui tools
+	  fd
       eza
       wget
       btop
+	  ripgrep
 	  gnumake
 	  openssl
       ripunzip
