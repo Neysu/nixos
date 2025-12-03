@@ -69,14 +69,23 @@
 	  viAlias = true;
 	  vimAlias = true;
 	  defaultEditor = true;
-      package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default; # to remove on the 25.11
+      package = inputs.neovim-nightly-overlay.packages.${pkgs.stdenv.hostPlatform.system}.default; # to remove on the 25.11
     };
   };
 
-  nix.settings = { 
-  	experimental-features = [ "nix-command" "flakes" ];
-	substituters = ["https://nix-citizen.cachix.org"];
-    trusted-public-keys = ["nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo="];
+  nix = {
+  	settings = { 
+  	  experimental-features = [ "nix-command" "flakes" ];
+	  substituters = ["https://nix-citizen.cachix.org"];
+      trusted-public-keys = ["nix-citizen.cachix.org-1:lPMkWc2X8XD4/7YPEEwXKKBg+SVbYTVrAaLA2wQTKCo="];
+      auto-optimise-store = true;
+	};
+    gc = {
+      automatic = true;
+      persistent = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
   };
 
   time.timeZone = "Europe/Paris";
@@ -178,6 +187,9 @@
 			"org/gnome/mutter" = {
 			  experimental-features = [ "scale-monitor-framebuffer" ];
 			};
+			"org/gnome/desktop/wm/keybindings" = {
+			  toggle-fullscreen = ["<Super>"];
+			};
 		  };
 		};
 		programs = {
@@ -273,19 +285,12 @@
   	];
   };
 
-  nix = {
-    settings.auto-optimise-store = true; #don't know why the lsp doesn't likes 'settings'
-    gc = {
-      automatic = true;
-      persistent = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
-    };
+  system = { 
+  	autoUpgrade = {
+      enable = true;
+      flake = "~/.config/flake-nixos/";
+      dates = "daily";
+	};
+	stateVersion = "25.05";
   };
-  system.autoUpgrade = {
-    enable = true;
-    flake = "~/.config/flake-nixos/";
-    dates = "daily";
-  };
-  system.stateVersion = "25.05";
 }
