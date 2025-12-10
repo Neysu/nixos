@@ -35,6 +35,10 @@
 
   virtualisation.docker.enable = true;
 
+  networking.hosts = {
+    "127.0.0.1" = [ "egibeaux.42.fr" ];
+  };
+
   programs = {
     starship.enable = true;
     firefox.enable = true;
