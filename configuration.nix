@@ -17,6 +17,12 @@
     };
   };
 
+  #networking = { 
+  #  enableIPv6 = false;
+  #  useHostResolvConf = false;
+  #	nameservers = [ "8.8.8.8" "1.1.1.1" ];
+  #};
+
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
@@ -25,8 +31,8 @@
     };
     kernel =  { 
 	  sysctl = {
-        "net.ipv6.conf.all.disable_ipv6" = true;
-        "net.ipv6.conf.default.disable_ipv6" = true;
+	    #"net.ipv6.conf.default.disable_ipv6" = true;
+	    #"net.ipv6.conf.enp3true4s0.disable_ipv6" = true;  # Ensure it's applied to the specific interface
 		"vm.max_map_count" = 16777216; # star citizen stuff
 		"fs.file-max" = 524288; # same here
       };
@@ -43,12 +49,12 @@
     starship.enable = true;
     firefox.enable = true;
     bat.enable = true;
-    steam = {
-      enable = true;
-      remotePlay.openFirewall = true;
-      dedicatedServer.openFirewall = true;
-      localNetworkGameTransfers.openFirewall = true;
-    };
+    # steam = {
+    #   enable = true;
+    #   remotePlay.openFirewall = true;
+    #   dedicatedServer.openFirewall = true;
+    #   localNetworkGameTransfers.openFirewall = true;
+    # };
 	bash = {
 		enable = true;
 		completion.enable = true;
@@ -132,6 +138,7 @@
 		{ appId = "io.github.mactan_sc.RSILauncher"; origin = "RSILauncher"; }
 		"ch.tlaun.TL"
 		"ca.desrt.dconf-editor"
+		"com.valvesoftware.Steam"
 	  ];
 	};
   };
@@ -197,6 +204,9 @@
 		  };
 		};
 		programs = {
+		  emacs = {
+			enable = true;
+		  };
 		  ghostty.enable = true;
 		  git = {
 			enable = true;
