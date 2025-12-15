@@ -118,6 +118,7 @@
 	gnome-user-docs
   ];
   services = {
+  	resolved.enable = true;
     xserver = {
       xkb.layout = "us";
     };
